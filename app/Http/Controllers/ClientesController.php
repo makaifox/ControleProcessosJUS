@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\clientes;
 use App\Exports\Processos;
+use App\Imports\ClientesImport;
 use Maatwebsite\Excel\Facades\Excel;
+
 
 class ClientesController extends Controller
 {
@@ -13,8 +15,8 @@ class ClientesController extends Controller
 
     public function index()
     {
-        $clientes = clientes::paginate();
-        return view('clientes.index',compact('clientes'));
+        $cliente = clientes::paginate(6);
+        return view('clientes.index', ['clientes' => $cliente]);
     }
 
 
@@ -42,24 +44,24 @@ class ClientesController extends Controller
 
     public function show($id)
     {
-        $clientes = clientes::findOrFail($id);
-        return view('clientes.show', ['clientes' => $clientes]);
+        $cliente = clientes::findOrFail($id);
+        return view('clientes.show', ['clientes' => $cliente]);
     }
 
     public function edit($id)
     {
-        $clientes = clientes::findOrFail($id);
-        return view('clientes.edit', ['clientes' => $clientes]);
+        $cliente = clientes::findOrFail($id);
+        return view('clientes.edit', ['clientes' => $cliente]);
     }
 
     public function update(Request $request, $id ) 
 
         
     {
-        $clientes = clientes::findOrFail($id);
+        $cliente = clientes::findOrFail($id);
 
 
-        $clientes->update([
+        $cliente->update([
         'nummeroProcesso' => $request->nummeroProcesso,
         'tribunal' => $request->tribunal,
         'comarca' => $request->comarca,
@@ -76,14 +78,14 @@ class ClientesController extends Controller
 
     public function delete($id)
     {
-        $clientes = clientes::findOrFail($id);
-        return view('clientes.delete',['clientes' => $clientes]);
+        $cliente = clientes::findOrFail($id);
+        return view('clientes.delete',['clientes' => $cliente]);
     }
 
     public function destroy($id)
     {
-        $clientes = clientes::findOrFail($id);
-        $clientes ->delete();
+        $cliente = clientes::findOrFail($id);
+        $cliente ->delete();
 
         return "Processo Removido com Sucesso !";
     }
@@ -93,13 +95,15 @@ class ClientesController extends Controller
         return Excel::download(new Processos, 'Processos.xlsx');
     } 
 
-    public function import() 
+    public function import(Request $request) 
     {
-        Excel::import(new ClientesImport,request()->file('file'));
-        
+        Excel::import(new ClientesImport,$request->file);
+       
         
         return redirect('/clientes')->with('success', 'Importação concluida com sucesso !');
     }
+
+
     
 }
 

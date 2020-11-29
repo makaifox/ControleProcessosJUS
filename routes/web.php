@@ -31,3 +31,5 @@ Route::post('/clientes/Excluir/{id}', 'App\Http\Controllers\ClientesController@d
 Route::get('processos_export','App\Http\Controllers\ClientesController@export');
 Route::post('processos_import','App\Http\Controllers\ClientesController@import');
 
+Route::get('/buscar','App\Http\Controllers\ClientesController@search');
+

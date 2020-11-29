@@ -3,9 +3,12 @@
 namespace App\Imports;
 
 use App\User;
+use App\Models\clientes;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Excel;
 
-class ClientesImport implements ToModel
+
+class ClientesImport implements ToModel 
 {
     /**
     * @param array $row
@@ -23,7 +26,11 @@ class ClientesImport implements ToModel
             'reu' =>  $row[5],
             'estado' =>   $row[6],
             'status' =>   $row[7],
+            'andamento' =>   $row[8],
 
          ]);
+
+         
     }
+
 }
